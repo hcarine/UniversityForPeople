@@ -21,7 +21,7 @@ public class GradeActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_notas);
+        setContentView(R.layout.table_notas);
 
     }
 }
