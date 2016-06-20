@@ -1,50 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="1">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:id="@+id/textView2"
+        android:layout_weight="0"
+        android:enabled="false"
+        android:textSize="80dp"
+        android:textIsSelectable="true"
+        android:layout_gravity="center_horizontal" />
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.2"
-        android:weightSum="1" >
+        android:weightSum="1"
+        android:layout_marginTop="50dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="CPF"
-            android:id="@+id/textView2"
-            android:layout_gravity="center_horizontal"
             android:layout_weight="0.12"
             android:layout_marginTop="20dp"
-            android:textColor="@color/colorPrimary"/>
+            android:textColor="@color/colorPrimary"
+            android:layout_gravity="center_horizontal" />
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/editText"
-            android:layout_marginBottom="5dp" />
+            android:id="@+id/txtUser"
+            android:ems="10"
+            android:layout_marginBottom="5dp"
+            android:nextFocusDown="@+id/txtPassword"
+            android:inputType="number"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Senha"
-            android:id="@+id/textView3"
-            android:layout_gravity="center_horizontal"
             android:layout_weight="0.12"
-            android:textColor="@color/colorPrimary"/>
+            android:textColor="@color/colorPrimary"
+            android:layout_gravity="center_horizontal" />
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
             android:ems="10"
-            android:id="@+id/editText2"
-            android:layout_gravity="center_horizontal"/>
+            android:id="@+id/txtPassword"
+            android:layout_gravity="center_horizontal"
+            android:nextFocusDown="@+id/btnLogin" />
 
     </LinearLayout>
 
@@ -52,7 +67,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Entrar"
-        android:id="@+id/login"
+        android:id="@+id/btnLogin"
         android:layout_gravity="center_horizontal"
         android:background="@color/green"
         android:textColor="@color/colorPrimaryDark" />

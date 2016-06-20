@@ -1,10 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:context="com.example.cari.universit.MainActivity">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:padding="6dip"
+    android:background="@color/colorPrimary">
 
-</android.support.design.widget.CoordinatorLayout>
+    <TextView
+        android:id="@+id/media_disciplina"
+        android:layout_width="100sp"
+        android:layout_height="fill_parent"
+        android:layout_marginRight="6dip"
+        android:text="Média"
+        android:src="@drawable/ic_menu_manage"
+        android:textSize="40sp"
+        android:layout_alignParentStart="true"
+        android:layout_alignBottom="@+id/last_update"
+        android:gravity="center_vertical|center_horizontal"
+        android:layout_below="@+id/nome_disciplina" />
+
+    <TextView
+        android:id="@+id/nome_disciplina"
+        android:text="Disciplinas"
+        android:layout_width="fill_parent"
+        android:layout_height="26dip"
+        android:singleLine="true"
+        android:textSize="16sp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:gravity="left" />
+
+
+    <TextView
+        android:id="@+id/last_update"
+        android:text="Ultima atualizaçao"
+        android:layout_width="fill_parent"
+        android:layout_height="26dip"
+        android:singleLine="true"
+        android:textSize="16sp"
+        android:gravity="right"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="51dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="Faltas: "
+        android:id="@+id/textView"
+        android:layout_alignBottom="@+id/last_update"
+        android:layout_toEndOf="@+id/media_disciplina"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="50dp"
+        android:layout_height="30dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:id="@+id/faltas_disciplina"
+        android:maxLength="10"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_alignTop="@+id/textView"
+        android:layout_toEndOf="@+id/textView" />
+
+</RelativeLayout>
