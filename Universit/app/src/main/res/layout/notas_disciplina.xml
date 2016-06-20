@@ -8,14 +8,14 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="60dip"
-    android:id="@+id/gradeLayout"
+    android:id="@+id/notas_disciplina"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.cari.universit.MainActivity">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Médias Semestrais"
+        android:text="Notas Semestrais"
         android:textColor="@color/colorPrimary"
         android:layout_weight="0.12"
         android:layout_alignParentEnd="false"
@@ -28,13 +28,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingTop="20dp"
-        android:id="@+id/lista_disciplinas"
+        android:id="@+id/lista_notas"
         android:dividerHeight="12dip"
         android:drawSelectorOnTop="false"
         android:divider="#ffffff"
         android:layout_below="@+id/title_principal">
     </ListView>
-
-
-
-</RelativeLayout>
+    </RelativeLayout>
