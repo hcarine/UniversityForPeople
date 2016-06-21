@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,18 +19,15 @@ public class OnItemClickListenerListViewItem implements AdapterView.OnItemClickL
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
         Context context = view.getContext();
-
         TextView textViewItem = ((TextView) view.findViewById(R.id.nome_disciplina));
-
-        // get the clicked item name
         String listItemText = textViewItem.getText().toString();
-//
-//        // get the clicked item ID
-//        String listItemId = textViewItem.getTag().toString();
-
-        // just toast it
         Toast.makeText(context, "Item: " + listItemText, Toast.LENGTH_SHORT).show();
         inflateContent(view);
+
+//        listaNotas = (ListView) view.findViewById(R.id.lista_notas);
+//        NotasArrayAdapterItem adapter = new NotasArrayAdapterItem(this, R.layout.activity_disciplina, disciplina.getNotas());
+//        listaNotas.setAdapter(adapter);
+
 
     }
 
@@ -39,4 +37,6 @@ public class OnItemClickListenerListViewItem implements AdapterView.OnItemClickL
         View myView = inflater.inflate(R.layout.notas_disciplina, null);
         layout.addView(myView);
     }
+
+
 }

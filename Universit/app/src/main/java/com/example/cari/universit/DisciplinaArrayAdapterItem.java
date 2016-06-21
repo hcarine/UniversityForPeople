@@ -12,7 +12,7 @@ import android.widget.TextView;
 import java.util.List;
 
 /**
- * Created by cari on 19/06/16.
+ * Created by cari on 10/06/16.
  */
 public class DisciplinaArrayAdapterItem extends ArrayAdapter<MainActivity.Disciplina> {
 
@@ -30,17 +30,13 @@ public class DisciplinaArrayAdapterItem extends ArrayAdapter<MainActivity.Discip
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
         if(convertView==null){
-            // inflate the layout
             LayoutInflater inflater = ((Activity) context).getLayoutInflater();
             convertView = inflater.inflate(resourceId, parent, false);
         }
 
-        // object item based on the position
         MainActivity.Disciplina disciplina = disciplinas[position];
 
-        // get the TextView and then set the text (item name) and tag (item ID) values
         TextView media = (TextView) convertView.findViewById(R.id.media_disciplina);
         media.setText(disciplina.getMedia());
         TextView nome = (TextView) convertView.findViewById(R.id.nome_disciplina);

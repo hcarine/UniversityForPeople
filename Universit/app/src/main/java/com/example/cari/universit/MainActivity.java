@@ -4,9 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.widget.ListViewAutoScrollHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -18,10 +15,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,14 +26,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -47,61 +36,69 @@ public class MainActivity extends AppCompatActivity
     public static final String PREFS = "SIGAPREFS";
 
     ListView listaDisciplinas;
+    ListView listaNotas;
     TextView nameUser;
     List<Disciplina> disciplinas = null;
+    RelativeLayout layout;
+    RelativeLayout gradeLayout;
+    View viewDisciplinas;
+    String username;
+    String password;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initCredentials();
         initNavigationDrawer();
         inflateContent();
 
         try {
             initDisciplinas();
         }catch(IOException e){
+            e.printStackTrace();
             System.out.println("exception");
+            Toast.makeText(this, "Não foi possível carregar as disciplinas. Verifique sua internet!", Toast.LENGTH_SHORT).show();
         }
-
-
         listaDisciplinas = (ListView) findViewById(R.id.lista_disciplinas);
-        DisciplinaArrayAdapterItem adapter = new DisciplinaArrayAdapterItem(this, R.layout.activity_notas, disciplinas.toArray(new Disciplina[disciplinas.size()]));
+        final DisciplinaArrayAdapterItem adapter = new DisciplinaArrayAdapterItem(this, R.layout.activity_notas, disciplinas.toArray(new Disciplina[disciplinas.size()]));
         listaDisciplinas.setAdapter(adapter);
         listaDisciplinas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-
                 Context context = view.getContext();
-
                 TextView textViewItem = ((TextView) view.findViewById(R.id.nome_disciplina));
-
-                // get the clicked item name
                 String listItemText = textViewItem.getText().toString();
-//
-                // get the clicked item ID
                 Disciplina disciplina = (Disciplina) textViewItem.getTag();
+                Toast.makeText(context, "Item: " + listItemText +" Codigo: " + disciplina.getCodigo(), Toast.LENGTH_SHORT).show();
 
-                // just toast it
                 try {
                     getNotas(disciplina);
                 } catch (IOException e) {
                     e.printStackTrace();
+                    Toast.makeText(MainActivity.this, "Não foi possível carregar as notas. Verifique sua internet!", Toast.LENGTH_SHORT).show();
                 }
-                Toast.makeText(context, "Item: " + listItemText +" Codigo: "+disciplina.getCodigo(), Toast.LENGTH_SHORT).show();
-                RelativeLayout layout = (RelativeLayout) MainActivity.this.findViewById(R.id.gradeContent);
-                RelativeLayout gradeLayout = (RelativeLayout) MainActivity.this.findViewById(R.id.gradeLayout);
-                gradeLayout.setVisibility(View.GONE);
+
+                layout.removeAllViews();
                 LayoutInflater inflater =(LayoutInflater) MainActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 View myView = inflater.inflate(R.layout.notas_disciplina, null);
                 layout.addView(myView);
+
+                listaNotas = (ListView) MainActivity.this.findViewById(R.id.list_grades);
+                NotasArrayAdapterItem adapter = new NotasArrayAdapterItem(MainActivity.this, R.layout.activity_disciplina, disciplina.getNotas().toArray(new Nota[disciplina.notas.size()]));
+                listaNotas.setAdapter(adapter);
             }
         });
 
     }
+    private void initCredentials(){
+        SharedPreferences settings = getSharedPreferences(PREFS, 0);
+        username = settings.getString("username", "");
+        password = settings.getString("password", "");
+    }
 
     private void getNotas(Disciplina disciplina) throws IOException {
-        String username= "08042123922";//txtUser.getText().toString();
-        String password = "88636169";//txtPassword.getText().toString();
         String cookieUrl = "http://siga.udesc.br/siga/inicial.do?evento=cookie";
         Connection.Response docCookie = Jsoup.connect(cookieUrl).ignoreHttpErrors(true).timeout(3000).execute();
 
@@ -125,7 +122,6 @@ public class MainActivity extends AppCompatActivity
             if(el.hasClass("linhapar") || el.hasClass("linhaimpar"))
                 disciplina.getNotas().add(mapToNota(el.getAllElements().get(0).children()));
         }
-        System.out.println(disciplina);
     }
     private Nota mapToNota(Elements atividadesHtml){
         Nota nota = new Nota();
@@ -134,16 +130,14 @@ public class MainActivity extends AppCompatActivity
         nota.setDataAvaliacao(atividadesHtml.get(2).text());
         nota.setNota(atividadesHtml.get(3).text());
         nota.setMediaTurma(atividadesHtml.get(4).text());
-        System.out.println(nota);
         return nota;
     }
 
     private void inflateContent(){
-        RelativeLayout layout = (RelativeLayout) findViewById(R.id.gradeContent);
-        //layout.removeAllViews();
+        layout = (RelativeLayout) findViewById(R.id.gradeContent);
         LayoutInflater inflater =(LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View myView = inflater.inflate(R.layout.content_main, null);
-        layout.addView(myView);
+        viewDisciplinas = inflater.inflate(R.layout.content_main, null);
+        layout.addView(viewDisciplinas);
     }
 
     private void initNavigationDrawer(){
@@ -152,7 +146,7 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
 
 
@@ -182,7 +176,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         int id = item.getItemId();
 
         if (id == R.id.action_logout) {
@@ -197,26 +190,21 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
-/*
 
         if (id == R.id.grade) {
-            //Intent intent = new Intent(this, GradeActivity.class);
-            startActivity(intent);
-        } else if (id == R.id.disciplinas) {
-
+           returnHome();
         }
-*/
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
+    private void returnHome(){
+        layout.removeAllViews();
+        layout.addView(viewDisciplinas);
+    }
     private void initDisciplinas() throws IOException {
-        String username= "08042123922";//txtUser.getText().toString();
-        String password = "88636169";//txtPassword.getText().toString();
         String cookieUrl = "http://siga.udesc.br/siga/inicial.do?evento=cookie";
         Connection.Response docCookie = Jsoup.connect(cookieUrl).ignoreHttpErrors(true).timeout(3000).execute();
 
@@ -233,7 +221,6 @@ public class MainActivity extends AppCompatActivity
 
         String periodoLetivo = docNotas.select("select#lPeriodoLetivo option[selected]").get(0).attr("value");
         String curso = docNotas.select("select#lCurso option[selected]").get(0).attr("value");
-//        System.out.println(doc.outerHtml());
         Elements element = docNotas.select("#resultado tr");
         disciplinas = new ArrayList<>();
         for(Element el : element){
@@ -366,6 +353,7 @@ public class MainActivity extends AppCompatActivity
         private String dataAvaliacao;
         private String nota;
         private String mediaTurma;
+        private Date ultimaAtualizacao = new Date();
 
         public String getCodigoAvaliacao() {
             return codigoAvaliacao;
@@ -405,6 +393,14 @@ public class MainActivity extends AppCompatActivity
 
         public void setMediaTurma(String mediaTurma) {
             this.mediaTurma = mediaTurma;
+        }
+
+        public Date getUltimaAtualizacao() {
+            return ultimaAtualizacao;
+        }
+
+        public void setUltimaAtualizacao(Date ultimaAtualizacao) {
+            this.ultimaAtualizacao = ultimaAtualizacao;
         }
 
         @Override

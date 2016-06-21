@@ -65,8 +65,8 @@ public class LoginActivity extends AppCompatActivity {
     private void sendGET() throws IOException {
 
         createEnvironment();
-        String userName= "08042123922";//txtUser.getText().toString();
-        String userPassword = "88636169";//txtPassword.getText().toString();
+        String userName= txtUser.getText().toString();
+        String userPassword = txtPassword.getText().toString();
         Boolean successLogin = login(userName, userPassword);
 
         if(successLogin){
@@ -95,7 +95,8 @@ public class LoginActivity extends AppCompatActivity {
 
             SharedPreferences settings = getSharedPreferences(PREFS, 0);
             SharedPreferences.Editor editor = settings.edit();
-            editor.putString("username", elements.get(0).ownText().trim());
+            editor.putString("username",username);
+            editor.putString("password",password);
             editor.commit();
             return true;
         }
